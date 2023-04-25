@@ -5,7 +5,7 @@
   tasks:
   - name: ping
     register: result
-    ping:
+    shell: ping 8.8.8.8
   - debug:
       msg: "{{ result.stdout }}"
 
