@@ -4,6 +4,7 @@
   gather_facts: false
   tasks:
   - name: ping
+    register: result
     ping:
   - debug:
       msg: "{{ result.stdout }}"
