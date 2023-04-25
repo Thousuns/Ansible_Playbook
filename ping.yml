@@ -5,4 +5,5 @@
   tasks:
   - name: ping
     ping:
+    debug: "Ping Test Success!"
 
