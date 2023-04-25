@@ -5,5 +5,8 @@
   tasks:
   - name: ping
     ping:
-    debug: "Ping Test Success!"
+
+  - name: announce ping status
+    debug:
+      msg: "Ping Test Success!"
 
