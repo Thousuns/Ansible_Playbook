@@ -1,0 +1,11 @@
+---
+- name: ping test
+  hosts: all
+  gather_facts: no
+
+  tasks:
+  - name: Test reachability to BS
+    junos_ping:
+      dest: 121.135.155.254
+
+
