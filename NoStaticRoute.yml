@@ -1,0 +1,28 @@
+---
+- name: Delete static route
+  hosts: all
+  gather_facts: no
+
+  vars:
+    target_addr: "8.8.8.0/24"
+    next_hop: "172.31.196.254"
+
+  tasks:
+  - name: Delete static route
+    junos_command:
+      commands:
+        - configure
+        - delete routing-options static route {{ target_addr }} next-hop {{ next_hop }}
+        - commit
+        - exit
+
+
+  - name: Verify static route
+    junos_command:
+      commands:
+        - show configuration | match {{ target_addr }}
+    register: result
+
+  - name: Print route table
+    debug:
+      msg: "{{ result.stdout_lines }}"
