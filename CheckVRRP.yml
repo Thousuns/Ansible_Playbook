@@ -1,0 +1,16 @@
+---
+- name: Check VRRP master status
+  hosts: all
+  gather_facts: no
+
+  tasks:
+  - name: Get VRRP master status
+    junos_command:
+      commands:
+        - show vrrp brief | match master
+    register: result
+
+  - name: Check VRRP master status
+    debug:
+      msg: "Device {{ inventory_hostname }} is currently the VRRP master"
+    when: result.stdout_lines | length > 1
