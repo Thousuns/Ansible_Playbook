@@ -20,7 +20,7 @@
   - name: Verify static route
     junos_command:
       commands:
-        - show route protocol static | match {{ target_addr }}
+        - show configuration | match {{ target_addr }}
     register: result
 
   - name: Print route table
