@@ -1,0 +1,18 @@
+---
+- name: Check Juniper device configuration
+  hosts: all
+  gather_facts: no
+
+  tasks:
+  - name: Check correctness of commit configuration
+    junos_command:
+      commands: 
+        - configure
+        - commit check
+
+    register: result
+
+  - name: Announce configuration status
+    debug:
+      msg: "The configuration is {{ result.stdout[1] }}"
+
