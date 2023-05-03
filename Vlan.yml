@@ -1,0 +1,41 @@
+---
+- name: Configure access VLAN on interface
+  hosts: all
+  gather_facts: no
+
+  vars:
+    interface_name: "xe-0/0/47"
+    vlan_name: "VLAN428"
+    vlan_id: "428"
+
+  tasks:
+  - name: Set access VLAN on interface
+    junos_command:
+      commands:
+        - configure
+        - set interfaces {{ interface_name }} unit 0 family ethernet-switching vlan members {{ vlan_name }}
+        - commit
+        - exit
+
+  - name: Verify VLAN configuration
+    junos_command:
+      commands:
+        - show configuration vlans {{ vlan_name }} | display set
+
+    register: vlan_config
+
+  - name: Print VLAN configuration
+    debug:
+      msg: "{{ vlan_config.stdout_lines }}"
+
+  - name: Verify VLAN on interface
+    junos_command:
+      commands:
+        - show configuration interfaces {{ interface_name }} | display set
+    register: interface_config
+
+  - name: Print interface configuration
+    debug:
+      msg: " {{ interface_config.stdout_lines }}"
+
+
