@@ -1,0 +1,29 @@
+---
+- name: Configure interface description
+  hosts: all
+  gather_facts: no
+
+  vars:
+    interface_name: "xe-0/0/31"
+    interface_description: "Example"
+
+  tasks:
+  - name: Set interface description
+    junos_command:
+      commands:
+        - configure
+        - delete interfaces {{ interface_name }} description {{ interface_description }}
+        - commit
+        - exit
+      
+  - name: Verify interface description
+    junos_command:
+      commands:
+        - show configuration interfaces {{ interface_name }} | display set | match {{ interface_description }}
+
+    register: result
+
+  - name: Print interface configuration
+    debug:
+      msg: "{{ result.stdout }}"
+
