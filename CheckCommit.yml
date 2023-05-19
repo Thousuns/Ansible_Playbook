@@ -14,5 +14,15 @@
 
   - name: Announce configuration status
     debug:
-      msg: "The configuration is {{ result.stdout[1] }}"
+      msg: "{{ result.stdout[1] }}"
 
+  - name: Commit configuration
+    junos_command:
+      commands:
+        - configure
+        - commit
+    register: result2
+
+##  - name: Announce configuration status
+##    debug:
+##      msg: "{{ result2.stdout[1] }}"
