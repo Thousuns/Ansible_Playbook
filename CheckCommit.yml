@@ -21,7 +21,7 @@
       commands:
         - configure
         - commit
-    register: result2
+##    register: result2
 
 ##  - name: Announce configuration status
 ##    debug:
