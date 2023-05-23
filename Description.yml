@@ -19,11 +19,10 @@
   - name: Verify interface description
     junos_command:
       commands:
-        - show configuration interfaces {{ interface_name }} | display set | match {{ interface_description }}
-
+        - show interfaces description | match {{ interface_description }}
     register: result
 
   - name: Print interface configuration
     debug:
-      msg: "{{ result.stdout }}"
+      msg: "{{ result.stdout_lines[0][1] }}"
 
