@@ -1,0 +1,73 @@
+---
+- name: Configure access VLAN on interface
+  hosts: all
+  gather_facts: no
+
+  vars:
+    interface_name_1: "xe-0/0/41"
+    interface_name_2: "xe-0/0/42"
+    vlan_name: "VLAN428"
+    vlan_id: "428"
+    interface_description: "ShowCase"
+
+  tasks:
+  - name: Set access VLAN on interface
+    junos_command:
+      commands:
+        - configure
+        - set interfaces {{ interface_name_1 }} unit 0 family ethernet-switching vlan members {{ vlan_name }}
+        - set interfaces {{ interface_name_2 }} unit 0 family ethernet-switching vlan members {{ vlan_name }}
+        - commit
+        - exit
+
+  - name: Set interface description
+    junos_command:
+      commands:
+        - configure
+        - set interfaces {{ interface_name_1 }} description {{ interface_description }}
+        - set interfaces {{ interface_name_2 }} description {{ interface_description }}
+        - commit
+        - exit
+
+  - name: Verify interface description
+    junos_command:
+      commands:
+        - show interfaces description | match {{ interface_description }}
+    register: result
+
+  - name: Print interface configuration
+    debug:
+      msg: "{{ result.stdout_lines[0][1] }}"
+
+  - name: Verify interface description
+    junos_command:
+      commands:
+        - show interfaces description | match {{ interface_description }}
+    register: result
+
+  - name: Print interface configuration
+    debug:
+      msg: "{{ result.stdout_lines[0][2] }}"
+
+
+
+  - name: Verify VLAN on interface
+    junos_command:
+      commands:
+        - show configuration interfaces {{ interface_name_1 }}
+    register: interface_config
+
+  - name: Print interface configuration
+    debug:
+      msg: " {{ interface_name_1 }} : {{ interface_config.stdout_lines[0][5] }} "
+
+  - name: Verify VLAN on interface
+    junos_command:
+      commands:
+        - show configuration interfaces {{ interface_name_2 }}
+    register: interface_config
+
+  - name: Print interface configuration
+    debug:
+      msg: " {{ interface_name_2 }} : {{ interface_config.stdout_lines[0][5] }} "
+
